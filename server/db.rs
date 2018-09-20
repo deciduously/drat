@@ -24,13 +24,21 @@ pub fn establish_connection_manager() -> ConnectionManager<PgConnection> {
 /// This is db executor actor. We are going to run 3 of them in parallel.
 pub struct DbExecutor(pub Pool<ConnectionManager<PgConnection>>);
 
-/// This is only message that this actor can handle, but it is easy to extend
-/// number of messages.
+/// Message to create a new task
 pub struct CreateTask {
     pub title: String,
 }
 
 impl Message for CreateTask {
+    type Result = Result<models::Task, Error>;
+}
+
+/// Message to retrieve a task by id
+pub struct GetTask {
+    pub id: String,
+}
+
+impl Message for GetTask {
     type Result = Result<models::Task, Error>;
 }
 
@@ -64,5 +72,22 @@ impl Handler<CreateTask> for DbExecutor {
             .map_err(|_| error::ErrorInternalServerError("Error loading new task"))?;
 
         Ok(ts.pop().unwrap())
+    }
+}
+
+impl Handler<GetTask> for DbExecutor {
+    type Result = Result<models::Task, Error>;
+
+    fn handle(&mut self, msg: GetTask, _: &mut Self::Context) -> Self::Result {
+        use self::schema::tasks::dsl::*;
+
+        let conn: &PgConnection = &self.0.get().unwrap();
+
+        let mut t = tasks
+            .filter(id.eq(msg.id))
+            .load::<models::Task>(conn)
+            .map_err(|_| error::ErrorInternalServerError("Error retriving specified task"))?;
+
+        Ok(t.pop().unwrap())
     }
 }

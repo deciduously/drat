@@ -30,8 +30,8 @@ use actix_web::{
     server::HttpServer,
     App,
 };
-use handlers::*;
 use db::{establish_connection_manager, DbExecutor};
+use handlers::*;
 use std::env::{set_var, var};
 
 pub struct AppState {
@@ -87,7 +87,8 @@ fn serve() -> Result<(), String> {
                         .allowed_methods(vec!["GET"])
                         .max_age(3600)
                         // async handler, returning Box<Future<Item=HttpResponse, Error=actix_web::Error>>
-                        .resource("/new/{name}", |r| r.route().with(new_task))
+                        .resource("/task/new/{name}", |r| r.route().with(new_task))
+                        .resource("/task/{id}", |r| r.route().with(get_task))
                         .register()
                 }
             }).middleware(middleware::Logger::default())
