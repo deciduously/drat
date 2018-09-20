@@ -20,6 +20,7 @@ extern crate serde_json;
 extern crate uuid;
 
 mod db;
+mod handlers;
 mod models;
 mod schema;
 
@@ -27,13 +28,13 @@ use actix::{Addr, SyncArbiter};
 use actix_web::{
     middleware::{self, cors::Cors},
     server::HttpServer,
-    App, AsyncResponder, FutureResponse, HttpResponse, Path, State,
+    App,
 };
-use db::{establish_connection_manager, CreateTask, DbExecutor};
-use futures::Future;
+use handlers::*;
+use db::{establish_connection_manager, DbExecutor};
 use std::env::{set_var, var};
 
-struct AppState {
+pub struct AppState {
     db: Addr<DbExecutor>,
 }
 
@@ -62,18 +63,6 @@ fn init_logging(level: u64) -> Result<(), String> {
     Ok(())
 }
 
-fn new_game((name, state): (Path<String>, State<AppState>)) -> FutureResponse<HttpResponse> {
-    state
-        .db
-        .send(CreateTask {
-            title: name.into_inner(),
-        }).from_err()
-        .and_then(|res| match res {
-            Ok(game) => Ok(HttpResponse::Ok().json(game)),
-            Err(_) => Ok(HttpResponse::InternalServerError().into()),
-        }).responder()
-}
-
 fn serve() -> Result<(), String> {
     dotenv::dotenv().ok();
     init_logging(1)?;
@@ -98,7 +87,7 @@ fn serve() -> Result<(), String> {
                         .allowed_methods(vec!["GET"])
                         .max_age(3600)
                         // async handler, returning Box<Future<Item=HttpResponse, Error=actix_web::Error>>
-                        .resource("/new/{name}", |r| r.route().with(new_game))
+                        .resource("/new/{name}", |r| r.route().with(new_task))
                         .register()
                 }
             }).middleware(middleware::Logger::default())

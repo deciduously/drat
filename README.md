@@ -7,9 +7,9 @@ Switch to ReasonReact for the prototype - I'd like to make a native app too that
 Kind of like Outlook flags - they can recur with granular options, but they can also hold data about the activity.
 
 * One off single tasks - just a checkbox
-- Recurring activity - exercise, musical insturment practice - can carry duration of activity - in these cases the button click starts the timer, click again to stop and confirm the time to log
-- Programming work - measuing what?  time?  commits?
-- Medication/supplement reminders - carry recurrance, dose - maybe even reminders about re-ordering?
+* Recurring activity - exercise, musical insturment practice - can carry duration of activity - in these cases the button click starts the timer, click again to stop and confirm the time to log
+* Programming work - measuing what?  time?  commits?
+* Medication/supplement reminders - carry recurrance, dose - maybe even reminders about re-ordering?
 
 The frontend just recieves the daily single instance versions - all recurrence is handled in the backend
 
