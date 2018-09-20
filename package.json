@@ -12,5 +12,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "mobx": "^5.1.2",
+    "mobx-react": "^5.2.8"
   }
 }

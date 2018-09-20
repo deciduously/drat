@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from 'react'
+import './App.css'
+import Task from './components/Task'
 
 class App extends Component {
   render() {
@@ -9,11 +10,11 @@ class App extends Component {
           <h1 className="App-title">DRAT</h1>
         </header>
         <p className="App-intro">
-          The Daily Routine Automated Tracker
+          <Task />
         </p>
       </div>
     );
   }
 }
 
-export default App;
+export default App

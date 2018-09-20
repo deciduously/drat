@@ -56,12 +56,12 @@ impl Handler<CreateTask> for DbExecutor {
         diesel::insert_into(tasks)
             .values(&new_task)
             .execute(conn)
-            .map_err(|_| error::ErrorInternalServerError("Error inserting game"))?;
+            .map_err(|_| error::ErrorInternalServerError("Error inserting task"))?;
 
         let mut ts = tasks
             .filter(id.eq(&uuid))
             .load::<models::Task>(conn)
-            .map_err(|_| error::ErrorInternalServerError("Error loading game"))?;
+            .map_err(|_| error::ErrorInternalServerError("Error loading new task"))?;
 
         Ok(ts.pop().unwrap())
     }
