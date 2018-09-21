@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import Task from './components/Task'
+import Task from './Task'
 
 class App extends Component {
   render() {
@@ -10,7 +10,7 @@ class App extends Component {
           <h1 className="App-title">DRAT</h1>
         </header>
         <p className="App-intro">
-          <Task />
+          <Task title="TASK 1 TITLE"/>
         </p>
       </div>
     );

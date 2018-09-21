@@ -2,7 +2,7 @@
 
 Daily routine tracker - glorified to-do list.
 
-Switch to ReasonReact for the prototype - I'd like to make a native app too that consumes the same Api, look into either ReactNative or Kotlin
+As much as I want to do this with ReasonReact, FORCE yourself do do it with the JS ecosystem.
 
 Kind of like Outlook flags - they can recur with granular options, but they can also hold data about the activity.
 
