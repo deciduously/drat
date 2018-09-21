@@ -4,6 +4,8 @@ Daily routine tracker - glorified to-do list.
 
 As much as I want to do this with ReasonReact, FORCE yourself do do it with the JS ecosystem.
 
+Copy your code somewhere else and then build up your react app without Create React App!
+
 Kind of like Outlook flags - they can recur with granular options, but they can also hold data about the activity.
 
 * One off single tasks - just a checkbox

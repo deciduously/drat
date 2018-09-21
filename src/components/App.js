@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import Task from './Task'
+import AppState from '../models'
 
 class App extends Component {
   render() {
@@ -10,11 +11,19 @@ class App extends Component {
           <h1 className="App-title">DRAT</h1>
         </header>
         <p className="App-intro">
-          <Task title="TASK 1 TITLE" />
+          <ul>
+            {this.props.store.tasks.map(task => (
+              <Task title={task.title} />
+            ))}
+          </ul>
         </p>
       </div>
     );
   }
+}
+
+App.propTypes = {
+  store: PropTypes.instanceOf(AppState)
 }
 
 export default App

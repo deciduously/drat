@@ -5,9 +5,9 @@ import PropTypes from 'prop-types'
 class Task extends Component {
   render() {
     return (
-      <div className="Task">
+      <li className="Task">
         <span className="title-text">{this.props.title}</span>
-      </div>
+      </li>
     )
   }
 }
