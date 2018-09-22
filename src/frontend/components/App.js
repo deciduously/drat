@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import Task from './Task'
 import AppState from '../models'
+import PropTypes from 'prop-types'
 
 class App extends Component {
   render() {
