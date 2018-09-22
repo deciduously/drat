@@ -2,9 +2,12 @@
 
 Daily routine automated tracker - as in "drat, I forgot to do my life right because I don't use drat".  It's a glorified to-do list.
 
-As much as I want to do this with ReasonReact, FORCE yourself do do it with the JS ecosystem.
+Backend in actix_web, frontend in React.js with MobX.
 
-Copy your code somewhere else and then build up your react app without Create React App!
+## Usage
+
+`yarn start` to run everything in one terminal, or `yarn watch:rs` and `yarn watch:js` in separate terminals.
+
 
 Kind of like Outlook flags - they can recur with granular options, but they can also hold data about the activity.
 

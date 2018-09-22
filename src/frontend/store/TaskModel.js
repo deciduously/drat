@@ -1,14 +1,12 @@
 import { action, observable } from 'mobx'
 
-var currentID = 0
-
 export default class TaskModel {
     @observable title = ''
     @observable completed = false
-    constructor(title) {
+    constructor(id, title, completed) {
         this.title = title
-        this.id = currentID
-        currentID += 1
+        this.id = id
+        this.completed = completed
     }
     @action toggleCompleted() {
         this.completed = !this.completed

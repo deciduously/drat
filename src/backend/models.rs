@@ -10,6 +10,11 @@ pub struct Task {
     // user ??
 }
 
+#[derive(Serialize)]
+pub struct TaskList {
+    pub tasks: Vec<Task>,
+}
+
 #[derive(Insertable)]
 #[table_name = "tasks"]
 pub struct NewTask<'a> {

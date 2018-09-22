@@ -5,15 +5,14 @@ const PRODUCTION = process.env.NODE_ENV === 'production'
 const outputDir = path.join(__dirname, 'public')
 
 module.exports = {
-  devtool: 'eval',
   entry: [
-    './src/frontend/index'
+    './src/frontend/index.jsx'
   ],
   mode: PRODUCTION ? 'production' : 'development',
   output: {
     path: outputDir,
     filename: 'js/bundle.js',
-    publicPath: outputDir,
+    publicPath: outputDir
   },
   resolve: {
     extensions: ['.js', '.jsx']
@@ -23,13 +22,14 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          { loader: 'css-loader' },
+          { loader: 'css-loader' }
         ]
       },
       {
         test: /\.jsx?$/,
+        exclude: [/node_modules/],
         use: [
-          { loader: 'babel-loader' },
+          { loader: 'babel-loader' }
         ]
       }
     ]

@@ -33,12 +33,26 @@ impl Message for CreateTask {
     type Result = Result<models::Task, Error>;
 }
 
+pub struct GetAllTasks;
+
+impl Message for GetAllTasks {
+    type Result = Result<models::TaskList, Error>;
+}
+
 /// Message to retrieve a task by id
 pub struct GetTask {
     pub id: String,
 }
 
 impl Message for GetTask {
+    type Result = Result<models::Task, Error>;
+}
+
+pub struct ToggleTask {
+    pub id: String,
+}
+
+impl Message for ToggleTask {
     type Result = Result<models::Task, Error>;
 }
 
@@ -59,6 +73,7 @@ impl Handler<CreateTask> for DbExecutor {
             completed: false,
         };
 
+        // impl Deref for Pool<ConnectionManager<PgConnection>>!
         let conn: &PgConnection = &self.0.get().unwrap();
 
         diesel::insert_into(tasks)
@@ -66,12 +81,28 @@ impl Handler<CreateTask> for DbExecutor {
             .execute(conn)
             .map_err(|_| error::ErrorInternalServerError("Error inserting task"))?;
 
+        info!("Inserted Task: {}", &msg.title);
+
         let mut ts = tasks
             .filter(id.eq(&uuid))
             .load::<models::Task>(conn)
             .map_err(|_| error::ErrorInternalServerError("Error loading new task"))?;
 
         Ok(ts.pop().unwrap())
+    }
+}
+
+impl Handler<GetAllTasks> for DbExecutor {
+    type Result = Result<models::TaskList, Error>;
+
+    fn handle(&mut self, _msg: GetAllTasks, _: &mut Self::Context) -> Self::Result {
+        use self::schema::tasks::dsl::*;
+
+        let conn: &PgConnection = &self.0.get().unwrap();
+
+        let ts = tasks.load::<models::Task>(conn);
+
+        Ok(models::TaskList { tasks: ts.unwrap() })
     }
 }
 
@@ -86,7 +117,35 @@ impl Handler<GetTask> for DbExecutor {
         let mut t = tasks
             .filter(id.eq(msg.id))
             .load::<models::Task>(conn)
-            .map_err(|_| error::ErrorInternalServerError("Error retriving specified task"))?;
+            .map_err(|_| error::ErrorInternalServerError("Error retrieving specified task"))?;
+
+        Ok(t.pop().unwrap())
+    }
+}
+
+impl Handler<ToggleTask> for DbExecutor {
+    type Result = Result<models::Task, Error>;
+
+    fn handle(&mut self, msg: ToggleTask, _: &mut Self::Context) -> Self::Result {
+        use self::schema::tasks::dsl::*;
+
+        let conn: &PgConnection = &self.0.get().unwrap();
+
+        // UPDATE
+        let current = tasks
+            .filter(id.eq(&msg.id))
+            .load::<models::Task>(conn)
+            .map_err(|_| error::ErrorInternalServerError("Could not find that task"))?
+            .pop()
+            .unwrap()
+            .completed;
+        let target = tasks.filter(id.eq(&msg.id));
+        diesel::update(target).set(completed.eq(!current));
+
+        let mut t = tasks
+            .filter(id.eq(&msg.id))
+            .load::<models::Task>(conn)
+            .map_err(|_| error::ErrorInternalServerError("Error retrieving specified task"))?;
 
         Ok(t.pop().unwrap())
     }
