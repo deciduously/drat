@@ -9,7 +9,6 @@ import { observer } from 'mobx-react'
 @observer
 class App extends Component {
   @observable newTaskName = 'Default'
-  @computed get buttonText() { 'Add Task: ' + this.newTaskName }
   render() {
     return (
       <div className="App">
@@ -24,7 +23,7 @@ class App extends Component {
         <div className="AddTask">
           <input id="newTaskName" type="text" value={this.newTaskName} onChange={_ => this.newTaskName = document.getElementById('newTaskName').value}></input>
           <button onClick={_ => this.props.store.addTask(this.newTaskName)}>
-            {this.buttonText}
+            {'Add Task ' + this.newTaskName}
           </button>
         </div>
       </div>
