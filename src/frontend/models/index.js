@@ -1,5 +1,5 @@
 import { action, computed, observable } from 'mobx'
-import Task from './Task'
+import TaskModel from './TaskModel'
 
 export default class AppState {
   @observable tasks = []
@@ -12,6 +12,6 @@ export default class AppState {
 
   @action addTask(title) {
     // Stand-in - this has a backend component to it
-    this.tasks.push(new Task(title))
+    this.tasks.push(new TaskModel(title))
   }
 }

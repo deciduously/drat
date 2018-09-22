@@ -11,13 +11,11 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">DRAT</h1>
         </header>
-        <p className="App-intro">
-          <ul>
-            {this.props.store.tasks.map(task => (
-              <Task title={task.title} />
-            ))}
-          </ul>
-        </p>
+        <ul>
+          {this.props.store.tasks.map(task => (
+            <Task key={task.id} task={task} />
+          ))}
+        </ul>
       </div>
     );
   }
