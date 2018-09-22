@@ -26,6 +26,7 @@ mod schema;
 
 use actix::{Addr, SyncArbiter};
 use actix_web::{
+    fs::StaticFiles,
     middleware::{self, cors::Cors},
     server::HttpServer,
     App,
@@ -79,7 +80,7 @@ fn serve() -> Result<(), String> {
     let addr = SyncArbiter::start(3, move || DbExecutor(pool.clone()));
 
     HttpServer::new(move || {
-        App::with_state(AppState{db: addr.clone()})
+        App::with_state(AppState { db: addr.clone() })
             .configure({
                 |app| {
                     Cors::for_app(app)
@@ -87,11 +88,13 @@ fn serve() -> Result<(), String> {
                         .allowed_methods(vec!["GET"])
                         .max_age(3600)
                         // async handler, returning Box<Future<Item=HttpResponse, Error=actix_web::Error>>
+                        .resource("/", |r| r.route().a(index))
                         .resource("/task/new/{name}", |r| r.route().with(new_task))
                         .resource("/task/{id}", |r| r.route().with(get_task))
                         .register()
                 }
             }).middleware(middleware::Logger::default())
+            .handler("/public", StaticFiles::new("./public/").unwrap())
     }).bind(url)
     .unwrap()
     .start();

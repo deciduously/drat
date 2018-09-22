@@ -1,6 +1,6 @@
 # drat
 
-Daily routine tracker - glorified to-do list.
+Daily routine automated tracker - as in "drat, I forgot to do my life right because I don't use drat".  It's a glorified to-do list.
 
 As much as I want to do this with ReasonReact, FORCE yourself do do it with the JS ecosystem.
 

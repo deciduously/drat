@@ -4,7 +4,7 @@ name = "drat"
 version = "0.0.1"
 [[bin]]
 name = "drat"
-path = "server/main.rs"
+path = "src/backend/main.rs"
 
 [dependencies]
 actix = "0.7"

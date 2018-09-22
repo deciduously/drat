@@ -2,13 +2,18 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './components/App'
-import registerServiceWorker from './registerServiceWorker'
 import AppState from './models'
+import DevTools from 'mobx-react-devtools'
+
 
 const store = new AppState()
 
 store.addTask("MOBX TASK")
 store.addTask("TWO OF THEM")
 
-ReactDOM.render(<App store={store} />, document.getElementById('root'))
-registerServiceWorker()
+ReactDOM.render(
+  <div id="app">
+    <App store={store} />
+    <DevTools />
+  </div>,
+  document.getElementById('root'))
