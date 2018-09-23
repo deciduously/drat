@@ -90,6 +90,7 @@ fn serve() -> Result<(), String> {
                         // async handler, returning Box<Future<Item=HttpResponse, Error=actix_web::Error>>
                         .resource("/", |r| r.route().a(index))
                         .resource("/task/all", |r| r.route().with(get_all_tasks))
+                        .resource("/task/delete/{id}", |r| r.route().with(delete_task))
                         .resource("/task/new/{name}", |r| r.route().with(new_task))
                         .resource("/task/toggle/{id}", |r| r.route().with(toggle_task))
                         .resource("/task/{id}", |r| r.route().with(get_task))

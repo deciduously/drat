@@ -29,6 +29,32 @@ export default class AppState {
       })
   }
 
+  @action deleteTask(id) {
+    fetch('http://localhost:8080/task/delete/' + id)
+      .then(res => {
+        if (res.ok) {
+          return 'ok!'
+        }
+
+        throw new Error('Network response was not ok')
+      }).then(_ => {
+        var idx = -1
+        const len = this.tasks.length
+        // find the task in the store
+        for (var i = 0; i < len; ++i) {
+          if (this.tasks[i].id === id) {
+            idx = i
+          }
+        }
+        // remove it
+        if (idx !== -1) {
+          this.tasks.splice(idx, 1)
+        }
+      }).catch(e => {
+        console.log('Failed fetch operation: ', e.message)
+      })
+  }
+
   @action refreshTasks() {
     // clear it all out and then reread
     this.tasks = []

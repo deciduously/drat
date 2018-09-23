@@ -2,12 +2,24 @@ use super::AppState;
 use actix_web::{
     self, fs::NamedFile, AsyncResponder, FutureResponse, HttpRequest, HttpResponse, Path, State,
 };
-use db::{CreateTask, GetAllTasks, GetTask, ToggleTask};
+use db::{CreateTask, DeleteTask, GetAllTasks, GetTask, ToggleTask};
 use futures::{future::result, Future};
 use std::{
     io::{BufReader, Read},
     path::PathBuf,
 };
+
+pub fn delete_task((id, state): (Path<String>, State<AppState>)) -> FutureResponse<HttpResponse> {
+    state
+        .db
+        .send(DeleteTask {
+            id: id.into_inner(),
+        }).from_err()
+        .and_then(|res| match res {
+            Ok(_) => Ok(HttpResponse::Ok().finish()),
+            Err(_) => Ok(HttpResponse::InternalServerError().into()),
+        }).responder()
+}
 
 pub fn get_all_tasks(state: State<AppState>) -> FutureResponse<HttpResponse> {
     state

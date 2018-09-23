@@ -18,7 +18,7 @@ class App extends Component {
         <button onClick={_ => this.props.store.refreshTasks()}>Refresh tasks</button>
         <ul>
           {this.props.store.tasks.map(task => (
-            <Task key={task.id} task={task} />
+            <Task key={task.id} task={task} deleteTask={event => this.props.store.deleteTask(event)} />
           ))}
         </ul>
         <div className="AddTask">

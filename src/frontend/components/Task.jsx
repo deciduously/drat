@@ -4,22 +4,19 @@ import PropTypes from 'prop-types'
 import TaskModel from '../store/TaskModel'
 import { observer } from 'mobx-react'
 
-@observer
-class Task extends Component {
-  render() {
-    return (
-      <li className="Task">
-        <span className="title-text">{this.props.task.title}</span>
-        <button onClick={_ => this.props.task.toggleCompleted()}>
-          {(this.props.task.completed ? 'Un-did it' : 'Did it')}
-        </button>
-      </li>
-    )
-  }
-}
+const Task = observer(({ task, deleteTask }) =>
+  <li className="Task">
+    <span className="title-text">{task.title}</span>
+    <button onClick={_ => task.toggleCompleted()}>
+      {(task.completed ? 'Un-did it' : 'Did it')}
+    </button>
+    <button onClick={_ => deleteTask(task.id)}>Delete</button>
+  </li>
+)
 
 Task.propTypes = {
   task: PropTypes.instanceOf(TaskModel),
+  deleteTask: PropTypes.func,
 }
 
 export default Task

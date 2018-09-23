@@ -33,6 +33,14 @@ impl Message for CreateTask {
     type Result = Result<models::Task, Error>;
 }
 
+pub struct DeleteTask {
+    pub id: String,
+}
+
+impl Message for DeleteTask {
+    type Result = Result<(), Error>;
+}
+
 pub struct GetAllTasks;
 
 impl Message for GetAllTasks {
@@ -89,6 +97,22 @@ impl Handler<CreateTask> for DbExecutor {
             .map_err(|_| error::ErrorInternalServerError("Error loading new task"))?;
 
         Ok(ts.pop().unwrap())
+    }
+}
+
+impl Handler<DeleteTask> for DbExecutor {
+    type Result = Result<(), Error>;
+
+    fn handle(&mut self, msg: DeleteTask, _: &mut Self::Context) -> Self::Result {
+        use self::schema::tasks::dsl::*;
+
+        let conn: &PgConnection = &self.0.get().unwrap();
+
+        diesel::delete(tasks.filter(id.eq(&msg.id)))
+            .execute(conn)
+            .unwrap();
+
+        Ok(())
     }
 }
 
