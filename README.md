@@ -4,18 +4,22 @@ Daily routine automated tracker - as in "drat, I forgot to do my life right beca
 
 It's a to-do list.
 
-Backend in actix_web, frontend in React.js with MobX.
+Backend in actix_web with diesel, frontend in React.js with MobX.
 
 ## Requirements
 
 * Stable rust
 * yarn
+* PostgreSQL
+* `diesel-cli` -- `cargo install diesel-cli`
 
 ## Usage
 
 ```shell
 git clone https://github.com/deciduously/drat
 cd drat
+echo "DATABASE_URL=postgres://username:password@localhost/drat" > .env
+diesel setup
 yarn
 yarn start
 ```
