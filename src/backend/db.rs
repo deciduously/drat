@@ -140,13 +140,12 @@ impl Handler<ToggleTask> for DbExecutor {
             .unwrap()
             .completed;
         let target = tasks.filter(id.eq(&msg.id));
-        diesel::update(target).set(completed.eq(!current));
+        let t = diesel::update(target)
+            .set(completed.eq(!current))
+            .get_result::<models::Task>(conn)
+            .unwrap();
+        info!("Toggled {} to {}", t.title, t.completed);
 
-        let mut t = tasks
-            .filter(id.eq(&msg.id))
-            .load::<models::Task>(conn)
-            .map_err(|_| error::ErrorInternalServerError("Error retrieving specified task"))?;
-
-        Ok(t.pop().unwrap())
+        Ok(t)
     }
 }

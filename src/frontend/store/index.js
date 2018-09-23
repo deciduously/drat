@@ -23,7 +23,7 @@ export default class AppState {
 
         throw new Error('Network response was not ok')
       }).then(r => {
-        this.tasks.push(new TaskModel(r.id, r.title, false))
+        this.tasks.push(new TaskModel(r.id, r.title, r.completed))
       }).catch(e => {
         console.log('Failed fetch operation: ', e.message)
       })

@@ -3,7 +3,7 @@ import './App.css'
 import Task from './Task'
 import AppState from '../store'
 import PropTypes from 'prop-types'
-import { computed, observable } from 'mobx'
+import { observable } from 'mobx'
 import { observer } from 'mobx-react'
 
 @observer
@@ -15,6 +15,7 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">DRAT</h1>
         </header>
+        <button onClick={_ => this.props.store.refreshTasks()}>Refresh tasks</button>
         <ul>
           {this.props.store.tasks.map(task => (
             <Task key={task.id} task={task} />
