@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import './AddTask.css'
+import styles from './AddTask.css'
 import PropTypes from 'prop-types'
 
 class AddTask extends Component {
@@ -9,7 +9,7 @@ class AddTask extends Component {
   }
   render() {
     return (
-      <div className="AddTask">
+      <div className={styles.addTask}>
         <input
           id="newTaskName"
           type="text"
@@ -25,7 +25,7 @@ class AddTask extends Component {
 }
 
 AddTask.propTypes = {
-  addTask: PropTypes.func,
+  addTask: PropTypes.func
 }
 
 export default AddTask

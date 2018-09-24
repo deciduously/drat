@@ -1,3 +1,7 @@
-.AddTask input {
+.AddTask {
+    background-color: antiquewhite;
+}
+
+.AddTask #newTaskName {
     background-color: khaki;
 }

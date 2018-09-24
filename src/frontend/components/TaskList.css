@@ -1,3 +1,9 @@
-.TaskList .tasklist-header {
+.TaskList .taskcontainer {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.TaskList .tasklistheader {
+    font-weight: bold;
     font-style: italic;
 }
