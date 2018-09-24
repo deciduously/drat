@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
-import Task from './Task'
+import TaskList from './TaskList'
 import AppState from '../store'
 import PropTypes from 'prop-types'
 import { observable } from 'mobx'
@@ -16,16 +16,14 @@ class App extends Component {
           <h1 className="App-title">DRAT</h1>
         </header>
         <button onClick={_ => this.props.store.refreshTasks()}>Refresh tasks</button>
-        <ul>
-          {this.props.store.tasks.map(task => (
-            <Task key={task.id} task={task} deleteTask={event => this.props.store.deleteTask(event)} />
-          ))}
-        </ul>
+
         <div className="AddTask">
           <input id="newTaskName" type="text" value={this.newTaskName} onChange={_ => this.newTaskName = document.getElementById('newTaskName').value}></input>
           <button onClick={_ => this.props.store.addTask(this.newTaskName)}>
             {'Add Task ' + this.newTaskName}
           </button>
+          <TaskList tasks={this.props.store.uncompletedTasks} header='To Do:' deleteTask={id => this.props.store.deleteTask(id)} />
+          <TaskList tasks={this.props.store.completedTasks} header='Complete:' deleteTask={id => this.props.store.deleteTask(id)} />
         </div>
       </div>
     );

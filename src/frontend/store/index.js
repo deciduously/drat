@@ -8,10 +8,16 @@ export default class AppState {
     this.refreshTasks()
   }
 
+  @computed get completedTasks() {
+    return this.tasks.filter(task => task.completed === true)
+  }
+
   @computed get completedTasksCount() {
-    return this.tasks.filter(
-      task => task.completed === true
-    ).length;
+    return this.completedTasks().length
+  }
+
+  @computed get uncompletedTasks() {
+    return this.tasks.filter(task => task.completed === false)
   }
 
   @action addTask(title) {
