@@ -24,6 +24,10 @@ pub fn establish_connection_manager() -> ConnectionManager<PgConnection> {
 /// This is db executor actor. We are going to run 3 of them in parallel.
 pub struct DbExecutor(pub Pool<ConnectionManager<PgConnection>>);
 
+impl Actor for DbExecutor {
+    type Context = SyncContext<Self>;
+}
+
 /// Message to create a new task
 pub struct CreateTask {
     pub title: String,
@@ -31,41 +35,6 @@ pub struct CreateTask {
 
 impl Message for CreateTask {
     type Result = Result<models::Task, Error>;
-}
-
-pub struct DeleteTask {
-    pub id: String,
-}
-
-impl Message for DeleteTask {
-    type Result = Result<(), Error>;
-}
-
-pub struct GetAllTasks;
-
-impl Message for GetAllTasks {
-    type Result = Result<models::TaskList, Error>;
-}
-
-/// Message to retrieve a task by id
-pub struct GetTask {
-    pub id: String,
-}
-
-impl Message for GetTask {
-    type Result = Result<models::Task, Error>;
-}
-
-pub struct ToggleTask {
-    pub id: String,
-}
-
-impl Message for ToggleTask {
-    type Result = Result<models::Task, Error>;
-}
-
-impl Actor for DbExecutor {
-    type Context = SyncContext<Self>;
 }
 
 impl Handler<CreateTask> for DbExecutor {
@@ -100,6 +69,14 @@ impl Handler<CreateTask> for DbExecutor {
     }
 }
 
+pub struct DeleteTask {
+    pub id: String,
+}
+
+impl Message for DeleteTask {
+    type Result = Result<(), Error>;
+}
+
 impl Handler<DeleteTask> for DbExecutor {
     type Result = Result<(), Error>;
 
@@ -116,6 +93,12 @@ impl Handler<DeleteTask> for DbExecutor {
     }
 }
 
+pub struct GetAllTasks;
+
+impl Message for GetAllTasks {
+    type Result = Result<models::TaskList, Error>;
+}
+
 impl Handler<GetAllTasks> for DbExecutor {
     type Result = Result<models::TaskList, Error>;
 
@@ -128,6 +111,14 @@ impl Handler<GetAllTasks> for DbExecutor {
 
         Ok(models::TaskList { tasks: ts.unwrap() })
     }
+}
+
+pub struct GetTask {
+    pub id: String,
+}
+
+impl Message for GetTask {
+    type Result = Result<models::Task, Error>;
 }
 
 impl Handler<GetTask> for DbExecutor {
@@ -145,6 +136,14 @@ impl Handler<GetTask> for DbExecutor {
 
         Ok(t.pop().unwrap())
     }
+}
+
+pub struct ToggleTask {
+    pub id: String,
+}
+
+impl Message for ToggleTask {
+    type Result = Result<models::Task, Error>;
 }
 
 impl Handler<ToggleTask> for DbExecutor {
