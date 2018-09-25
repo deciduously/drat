@@ -28,7 +28,6 @@ impl Actor for DbExecutor {
     type Context = SyncContext<Self>;
 }
 
-/// Message to create a new task
 pub struct CreateTask {
     pub title: String,
 }

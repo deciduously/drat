@@ -33,5 +33,5 @@ Kind of like Outlook flags - they can recur with granular options, but they can 
 * One off single tasks - just a checkbox
 * Recurring activity - exercise, musical insturment practice - can carry duration of activity - in these cases the button click starts the timer, click again to stop and confirm the time to log
 * Programming work - measuing what?  time?  commits?
-* Medication/supplement reminders - carry recurrance, dose - maybe even reminders about re-ordering?
+* Medication/supplement reminders - carry Recurrence, dose - maybe even reminders about re-ordering?
 

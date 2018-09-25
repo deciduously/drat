@@ -2,5 +2,6 @@
 CREATE TABLE tasks (
     id VARCHAR PRIMARY KEY,
     title VARCHAR NOT NULL,
-    completed BOOLEAN NOT NULL
+    completed BOOLEAN NOT NULL,
+    recurrence VARCHAR NOT NULL
 )

@@ -5,6 +5,7 @@
 
 extern crate actix;
 extern crate actix_web;
+extern crate chrono;
 #[macro_use]
 extern crate diesel;
 extern crate dotenv;

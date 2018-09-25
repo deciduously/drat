@@ -9,6 +9,7 @@ path = "src/backend/main.rs"
 [dependencies]
 actix = "0.7"
 actix-web = "0.7"
+chrono = "0.4"
 dotenv = "0.13"
 futures = "0.1"
 log = "0.4"

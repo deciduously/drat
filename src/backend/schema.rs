@@ -3,5 +3,6 @@ table! {
         id -> Varchar,
         title -> Varchar,
         completed -> Bool,
+        recurrence -> Varchar,
     }
 }
