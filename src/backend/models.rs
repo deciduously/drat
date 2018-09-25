@@ -61,58 +61,59 @@ impl FromStr for Recurrence {
             // FIRST check if it's a duplicate
             // each branch with  call chars.next().unwrap()
             // we know it will succeed because we already threw out odd-length strs
-            match chars.next() {
-                Some('M') => {
-                    ret.push(Weekday::Mon);
-                    chars.next().unwrap();
-                }
-                Some('T') => {
-                    if chars.next().unwrap() == 'u' {
-                        ret.push(Weekday::Tue);
-                    } else if chars.next().unwrap() == 'h' {
-                        ret.push(Weekday::Thu);
-                    } else {
+            loop {
+                match chars.next() {
+                    Some('M') => {
+                        ret.push(Weekday::Mon);
+                        chars.next().unwrap();
+                    }
+                    Some('T') => {
+                        let c = chars.next().unwrap();
+                        if c == 'u' {
+                            ret.push(Weekday::Tue);
+                        } else if c == 'h' {
+                            ret.push(Weekday::Thu);
+                        } else {
+                            return Err(::std::io::Error::new(
+                                ::std::io::ErrorKind::InvalidInput,
+                                "T followed by somethong other than u or h",
+                            ));
+                        }
+                    }
+                    Some('W') => {
+                        ret.push(Weekday::Wed);
+                        chars.next().unwrap();
+                    }
+                    Some('F') => {
+                        ret.push(Weekday::Fri);
+                        chars.next().unwrap();
+                    }
+                    Some('S') => {
+                        let c = chars.next().unwrap();
+                        if c == 'a' {
+                            ret.push(Weekday::Sat);
+                        } else if c == 'u' {
+                            ret.push(Weekday::Sun);
+                        } else {
+                            return Err(::std::io::Error::new(
+                                ::std::io::ErrorKind::InvalidInput,
+                                "S followed by somethong other than a or u",
+                            ));
+                        }
+                    }
+                    Some(_) => {
                         return Err(::std::io::Error::new(
                             ::std::io::ErrorKind::InvalidInput,
-                            "T followed by somethong other than u or h",
-                        ));
+                            "Garbage fond in recurrence string",
+                        ))
                     }
-                }
-                Some('W') => {
-                    ret.push(Weekday::Wed);
-                    chars.next().unwrap();
-                }
-                Some('F') => {
-                    ret.push(Weekday::Fri);
-                    chars.next().unwrap();
-                }
-                Some('S') => {
-                    if chars.next().unwrap() == 'a' {
-                        ret.push(Weekday::Sat);
-                    } else if chars.next().unwrap() == 'u' {
-                        ret.push(Weekday::Sun);
-                    } else {
-                        return Err(::std::io::Error::new(
-                            ::std::io::ErrorKind::InvalidInput,
-                            "S followed by somethong other than a or u",
-                        ));
+                    None => {
+                        // it's over, dedup  and out
+                        ret.dedup();
+                        return Ok(Each(ret));
                     }
-                }
-                Some(_) => {
-                    return Err(::std::io::Error::new(
-                        ::std::io::ErrorKind::InvalidInput,
-                        "Garbage fond in recurrence string",
-                    ))
-                }
-                None => {
-                    return Err(::std::io::Error::new(
-                        ::std::io::ErrorKind::InvalidInput,
-                        "Wrong length recurrence string",
-                    ))
                 }
             }
-
-            Ok(Each(ret))
         }
     }
 }
@@ -142,6 +143,15 @@ pub struct NewTask<'a> {
 #[cfg(test)]
 mod test {
     use super::*;
+    static ALL_DAYS_STR: &'static str = "MoTuWeThFrSaSu";
+
+    #[test]
+    fn test_recurrence_round_trip_str() {
+        assert_eq!(
+            ALL_DAYS_STR,
+            &format!("{}", Recurrence::from_str(ALL_DAYS_STR).unwrap())
+        )
+    }
     #[test]
     fn test_recurrence_from_valid_str_none() {
         assert_eq!(Recurrence::from_str("None").unwrap(), Recurrence::OneOff)
@@ -156,7 +166,7 @@ mod test {
     #[test]
     fn test_recurrence_from_valid_str_all_days() {
         assert_eq!(
-            Recurrence::from_str("MoTuWeThFrSaSu").unwrap(),
+            Recurrence::from_str(ALL_DAYS_STR).unwrap(),
             Recurrence::Each(vec![
                 Weekday::Mon,
                 Weekday::Tue,
@@ -169,11 +179,10 @@ mod test {
         )
     }
     #[test]
-    #[should_panic]
     fn test_recurrence_from_valid_str_duplicate() {
         assert_eq!(
-            Recurrence::from_str("MoMo").unwrap(),
-            Recurrence::Each(vec![Weekday::Mon, Weekday::Mon])
+            Recurrence::from_str("MoMoTh").unwrap(),
+            Recurrence::Each(vec![Weekday::Mon, Weekday::Thu])
         )
     }
     #[test]
